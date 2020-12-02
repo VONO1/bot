@@ -84,7 +84,7 @@ mmm4 = types.InlineKeyboardButton(text='Сильно', callback_data='get_user_i
 mmm5 = types.InlineKeyboardButton(text='Крайне сильно', callback_data='get_user_info3')
 test_menu.add(mmm1, mmm2, mmm3, mmm4, mmm5)
 
-#МЕНЮ ИНСТАГРАМ
+#МЕНЮ ИНСТАГРАМ@
 inst_menu = types.InlineKeyboardMarkup(row_width=1)
 inst1 = types.InlineKeyboardButton(text='Сидняев Виталий', url="https://www.instagram.com/sidnyaev_psy/")
 inst2 = types.InlineKeyboardButton(text='Денис Иванов', url="https://www.instagram.com/id_psy/")
