@@ -10,14 +10,6 @@ client.enable_save_next_step_handlers(delay=2)
 # Импортируем типы из модуля, чтобы создавать кнопки
 from telebot import types
 
-
-
-markup = types.ReplyKeyboardMarkup(True)
-key1 = types.KeyboardButton('START')
-markup.add(key1)
-
-
-
 symptoms = [
 'затруднение на вдохе, нехватка воздуха или учащенное дыхание',
 'Ощущение удушья или комка в горле',
@@ -61,14 +53,13 @@ results = ['баллов. Поздравляем! У Вас отсутствуе
 ]
 
 
-
 #ГЛАВНОЕ МЕНЮ:
 bot_main_menu = types.InlineKeyboardMarkup(row_width=1)
 item_no = types.InlineKeyboardButton(text='Тест самооценки тревоги \n SPRA Д. Шихана', callback_data='question')
 open_chat = types.InlineKeyboardButton(text='Открытый чат группы ПОПА ',url="https://t.me/joinchat/EZkYyBvRq8f4A_uzelWPig")
 close_chat = types.InlineKeyboardButton(text='Закрытый чат с Денисом и Виталием', callback_data='zodiac')
 you_tube = types.InlineKeyboardButton(text='Наш канал YouTube',url="https://www.youtube.com/channel/UC5i4yB4eOdLyA-eXv1Hi5cg?view_as=subscriber")
-help_salf= types.InlineKeyboardButton(text='Техники самопомощи ', callback_data='zodiac')
+help_salf= types.InlineKeyboardButton(text='Техники самопомощи ', callback_data='get_tech')
 d_app = types.InlineKeyboardButton(text='Скачать приложение Без тревоги', url="https://example.com")
 kons = types.InlineKeyboardButton(text='Записаться на индивидуальную консультацию', callback_data='zodiac')
 insta = types.InlineKeyboardButton(text='Мы в Инстаграм', callback_data='instagrams')
@@ -88,7 +79,8 @@ test_menu.add(mmm1, mmm2, mmm3, mmm4, mmm5)
 inst_menu = types.InlineKeyboardMarkup(row_width=1)
 inst1 = types.InlineKeyboardButton(text='Сидняев Виталий', url="https://www.instagram.com/sidnyaev_psy/")
 inst2 = types.InlineKeyboardButton(text='Денис Иванов', url="https://www.instagram.com/id_psy/")
-inst_menu.add(inst1, inst2)
+mainn = types.InlineKeyboardButton(text='Главное меню', callback_data='get_user_info')
+inst_menu.add(inst1, inst2, mainn)
 
 
 #МЕНЮ ПОЛУЧЕНИЯ РЕЗУЛЬТАТОВ
@@ -103,11 +95,23 @@ pay = types.InlineKeyboardButton(text='Оплатить', callback_data='get_use
 # item_yes = types.InlineKeyboardButton(text='Да', callback_data='yes')
 privat_menu.add(pay)
 
+#МЕНЮ ТЕХНИКИ
+tech_menu = types.InlineKeyboardMarkup(row_width=1)
+B_TECH1 = types.InlineKeyboardButton(text='Техника осознанности «Изюм»', callback_data='TECH1')
+B_TECH2 = types.InlineKeyboardButton(text='Практика «5-4-3-2-1»  ', callback_data='TECH2')
+B_TECH3 = types.InlineKeyboardButton(text='Переключение внимания', callback_data='TECH3')
+B_TECH4 = types.InlineKeyboardButton(text='Техника STOP/ СТОП', callback_data='TECH4')
+B_TECH5 = types.InlineKeyboardButton(text='Техника работы с телом', callback_data='TECH5')
+B_TECH6 = types.InlineKeyboardButton(text='Рюкзак тревоги', callback_data='TECH6')
+B_TECH7 = types.InlineKeyboardButton(text='Техника дыхания', callback_data='TECH7')
+B_TECH8 = types.InlineKeyboardButton(text='Прогрессивно-мышечная релаксация по Джекосбону.', callback_data='TECH8')
+mainn = types.InlineKeyboardButton(text='Главное меню', callback_data='get_user_info')
+tech_menu.add(B_TECH1,B_TECH2,B_TECH3,B_TECH4,B_TECH5,B_TECH6,B_TECH7,B_TECH8)
 
 def sendd():
     requests.get('https://api.telegram.org/bot{}/sendMessage'.format(client),params=dict(chat_id='@Vitalii_super_bot', text='Hello world!'))
 
-@client.message_handler(commands=['START'])
+@client.message_handler(commands=['start'])
 def get_user_info(message):
     client.send_message(message.chat.id, 'Выберите нужный раздел', reply_markup=bot_main_menu)
 
@@ -115,7 +119,6 @@ def get_user_info(message):
 @client.callback_query_handler(func=lambda call: True)
 def answer(call):
     def SUPERFUNCTION(z):
-
         global Xr
         global Q
         Xr = Xr + z
@@ -158,6 +161,11 @@ def answer(call):
         client.send_message(call.message.chat.id, 'Пожалуйста введите ваш email')
     elif call.data == 'instagrams':
         client.send_message(call.from_user.id, text= 'Ежедневно обновляемый, самый актуальный материал о КПТ и о нашей жизни в наших аккаунтах', reply_markup=inst_menu)
+    elif call.data == 'get_tech':
+        client.send_message(call.from_user.id, text='Помните, что техники станут только помогающим инструментом при работе с тревогой. Они не заменяют полноценных консультаций.',reply_markup=tech_menu)
+
+
+
 
 @client.message_handler(content_types=['text'])
 def get_text(message):
@@ -181,6 +189,7 @@ def go_main_menu(message):
 
 def get_suka(message):
     client.send_message(message.chat.id, 'Вернуться?', reply_markup=inst_menu)
+
 
 
 
