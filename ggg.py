@@ -57,11 +57,11 @@ results = ['баллов. Поздравляем! У Вас отсутствуе
 bot_main_menu = types.InlineKeyboardMarkup(row_width=1)
 item_no = types.InlineKeyboardButton(text='Тест самооценки тревоги \n SPRA Д. Шихана', callback_data='question')
 open_chat = types.InlineKeyboardButton(text='Открытый чат группы ПОПА ',url="https://t.me/joinchat/EZkYyBvRq8f4A_uzelWPig")
-close_chat = types.InlineKeyboardButton(text='Закрытый чат с Денисом и Виталием', callback_data='zodiac')
+close_chat = types.InlineKeyboardButton(text='Закрытый чат с Денисом и Виталием', callback_data='privat_group')
 you_tube = types.InlineKeyboardButton(text='Наш канал YouTube',url="https://www.youtube.com/channel/UC5i4yB4eOdLyA-eXv1Hi5cg?view_as=subscriber")
 help_salf= types.InlineKeyboardButton(text='Техники самопомощи ', callback_data='get_tech')
 d_app = types.InlineKeyboardButton(text='Скачать приложение Без тревоги', url="https://example.com")
-kons = types.InlineKeyboardButton(text='Записаться на индивидуальную консультацию', callback_data='zodiac')
+kons = types.InlineKeyboardButton(text='Записаться на индивидуальную консультацию', callback_data='zapis')
 insta = types.InlineKeyboardButton(text='Мы в Инстаграм', callback_data='instagrams')
 bot_main_menu.add(item_no,open_chat,close_chat,you_tube,help_salf,d_app,kons,insta)
 
@@ -91,9 +91,17 @@ result_menu.add(ras)
 
 #МЕНЮ ОПЛАТЫ
 privat_menu = types.InlineKeyboardMarkup()
-pay = types.InlineKeyboardButton(text='Оплатить', callback_data='get_user_mail')
+pay = types.InlineKeyboardButton(text='Оплатить', url='https://yoomoney.ru/to/4100110844125514')
 # item_yes = types.InlineKeyboardButton(text='Да', callback_data='yes')
-privat_menu.add(pay)
+mainn = types.InlineKeyboardButton(text='Главное меню', callback_data='get_user_info')
+privat_menu.add(pay, mainn)
+
+#МЕНЮ ЗАПИСИ НА КОНСУЛЬТАЦИЮ
+zapis_menu = types.InlineKeyboardMarkup()
+zapis = types.InlineKeyboardButton(text='Оплатить', url='https://yoomoney.ru/to/4100110844125514')
+# item_yes = types.InlineKeyboardButton(text='Да', callback_data='yes')
+mainn = types.InlineKeyboardButton(text='Главное меню', callback_data='get_user_info')
+zapis_menu.add(pay, mainn)
 
 #МЕНЮ ТЕХНИКИ
 tech_menu = types.InlineKeyboardMarkup(row_width=1)
@@ -107,6 +115,10 @@ B_TECH7 = types.InlineKeyboardButton(text='Техника дыхания', callb
 B_TECH8 = types.InlineKeyboardButton(text='Прогрессивно-мышечная релаксация по Джекосбону.', callback_data='TECH8')
 mainn = types.InlineKeyboardButton(text='Главное меню', callback_data='get_user_info')
 tech_menu.add(B_TECH1,B_TECH2,B_TECH3,B_TECH4,B_TECH5,B_TECH6,B_TECH7,B_TECH8)
+
+
+#МЕНЮ ОПЛАТЫ
+
 
 def sendd():
     requests.get('https://api.telegram.org/bot{}/sendMessage'.format(client),params=dict(chat_id='@Vitalii_super_bot', text='Hello world!'))
@@ -162,7 +174,11 @@ def answer(call):
     elif call.data == 'instagrams':
         client.send_message(call.from_user.id, text= 'Ежедневно обновляемый, самый актуальный материал о КПТ и о нашей жизни в наших аккаунтах', reply_markup=inst_menu)
     elif call.data == 'get_tech':
-        client.send_message(call.from_user.id, text='Помните, что техники станут только помогающим инструментом при работе с тревогой. Они не заменяют полноценных консультаций.',reply_markup=tech_menu)
+        client.send_message(call.from_user.id, text='Помните, что техники станут только помогающим инструментом при работе с тревогой. Они не заменяют полноценных консультаций.', reply_markup=tech_menu)
+    elif call.data == 'privat_group':
+        client.send_message(call.from_user.id, text='Безлимитное полноценное общение с психологами в формате чата в течении месяца всего за 999 рублей! ', reply_markup=privat_menu)
+    elif call.data == 'zapis':
+        client.send_message(call.from_user.id, text='Напишите Ваш номер телефона:')
 
 
 
@@ -178,8 +194,11 @@ def get_text(message):
         client.register_next_step_handler(message, get_user_mail)
     if '@' in message.text:
         sendd()
-        requests.get('https://api.telegram.org/bot{}/sendMessage'.format('1457884681:AAF9GjlOLP7hlhlqimmIMm5heybKXv-Ig28'),params=dict(chat_id='@Vitalii_super_bot', text=message.text))
+        requests.get('https://api.telegram.org/bot{}/sendMessage'.format('1457884681:AAF9GjlOLP7hlhlqimmIMm5heybKXv-Ig28'),params=dict(chat_id='@Vitalii_super_bot', text='Новый посетитель прошёл тест в боте: ' + message.text))
         client.send_message(message.chat.id, 'Спасибо! Рекомендации будут отправлены на ваш адрес', reply_markup=bot_main_menu)
+    if '89' in message.text or '+79' in message.text:
+        requests.get('https://api.telegram.org/bot{}/sendMessage'.format('1457884681:AAF9GjlOLP7hlhlqimmIMm5heybKXv-Ig28'),params=dict(chat_id='@Vitalii_super_bot', text='Новая запись на консультацию, номер телефона' +message.text))
+        client.send_message(message.chat.id, 'Спасибо! Мы свяжемся с вами чтобы подобрать удобное время', reply_markup=bot_main_menu)
 
 def go_main_menu(message):
     print('мы здесь')
