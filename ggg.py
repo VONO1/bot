@@ -73,8 +73,8 @@ test_menu = types.InlineKeyboardMarkup(row_width=1)
 mmm1 = types.InlineKeyboardButton(text='Нет', callback_data='get_user_info1')
 mmm2 = types.InlineKeyboardButton(text='Немного', callback_data='get_user_info2')
 mmm3 = types.InlineKeyboardButton(text='Умеренно', callback_data='get_user_info3')
-mmm4 = types.InlineKeyboardButton(text='Сильно', callback_data='get_user_info2')
-mmm5 = types.InlineKeyboardButton(text='Крайне сильно', callback_data='get_user_info3')
+mmm4 = types.InlineKeyboardButton(text='Сильно', callback_data='get_user_info4')
+mmm5 = types.InlineKeyboardButton(text='Крайне сильно', callback_data='get_user_info5')
 test_menu.add(mmm1, mmm2, mmm3, mmm4, mmm5)
 
 #МЕНЮ ИНСТАГРАМ@
@@ -140,7 +140,7 @@ def answer(call):
             print('Номер вопроса:', Q+1)
             print('Длина списка', len(symptoms))
             Q = Q + 1
-            client.send_message(call.from_user.id, text='Вопрос '+ str(Q) + '/' + str(len(symptoms))+'\n' +'Как сильно Вы ощущаете ' + symptoms[(Q-1)].lower(), reply_markup=test_menu)
+            client.send_message(call.from_user.id, text='Вопрос '+ str(Q) + '/' + str(len(symptoms))+'\n' +'Как сильно Вы ощущаете ' + symptoms[(Q-1)].lower() +'?', reply_markup=test_menu)
         else:
             if Xr <30:
                 znn = 0
@@ -149,6 +149,8 @@ def answer(call):
             if 80 > Xr & Xr > 30:
                 znn = 1
             client.send_message(call.from_user.id, 'Ваш результат: ' + str(Xr) + ' балла(ов)'+'\n' + results[znn], reply_markup=result_menu)
+            Xr = 0
+            Q = 1
 
     if call.data == 'yes':
         pass
